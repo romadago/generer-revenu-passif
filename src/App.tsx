@@ -47,7 +47,7 @@ const App: React.FC = () => {
   // --- State Management for Inputs ---
   const [revenuRecherche, setRevenuRecherche] = useState<number>(1500);
   const [dureePlacement, setDureePlacement] = useState<number>(15);
-  const [versementInitial, setVersementInitial] = useState<number>(20000);
+  const [versementInitial, setVersementInitial] = useState<number>(10000);
   
   // --- State Management for Results ---
   const [results, setResults] = useState({ versementMensuelRequis: 0, capitalVise: 0 });
@@ -164,11 +164,10 @@ const App: React.FC = () => {
     };
 
     try {
-        // This is the call to the Netlify serverless function
         const response = await fetch('/.netlify/functions/send-simulation', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, data: simulationData }),
+            body: JSON.stringify({ email, data: simulationData, theme: 'Revenu Passif' }),
         });
 
         if (!response.ok) {
@@ -202,7 +201,7 @@ const App: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 mb-12">
             {/* Left Column: Controls */}
             <div className="lg:col-span-2 bg-slate-700/50 p-6 rounded-lg shadow-inner ring-1 ring-white/10">
-                <h2 className="text-2xl font-semibold text-[#00FFD2] mb-6">Vos Objectifs</h2>
+                <h2 className="text-2xl font-semibold text-[#00FFD2] mb-6">Votre Objectif</h2>
                 <div className="space-y-6">
                 <InputSlider
                     id="revenuRecherche"
@@ -210,7 +209,7 @@ const App: React.FC = () => {
                     unit="€"
                     value={revenuRecherche}
                     onChange={(e) => setRevenuRecherche(parseFloat(e.target.value))}
-                    min={100} max={5000} step={100}
+                    min={500} max={7000} step={100}
                 />
                 <InputSlider
                     id="dureePlacement"
@@ -218,7 +217,7 @@ const App: React.FC = () => {
                     unit="ans"
                     value={dureePlacement}
                     onChange={(e) => setDureePlacement(parseFloat(e.target.value))}
-                    min={5} max={45} step={1}
+                    min={5} max={40} step={1}
                 />
                 <InputSlider
                     id="versementInitial"
@@ -235,7 +234,7 @@ const App: React.FC = () => {
             <div className="lg:col-span-3 bg-slate-700/50 p-6 rounded-lg shadow-inner ring-1 ring-white/10 flex flex-col justify-start">
                 <div className="text-center">
                     <h2 className="text-2xl font-semibold text-[#00FFD2] mb-4">Résultat de votre projet</h2>
-                    <p className="text-gray-300 mb-6">Pour générer un revenu passif de <span className="font-bold text-white">{revenuRecherche.toLocaleString('fr-FR')} €/mois</span>, l'effort d'épargne mensuel suggéré est de :</p>
+                    <p className="text-gray-300 mb-6">Pour générer un revenu passif de <span className="font-bold text-white">{revenuRecherche.toLocaleString('fr-FR')} €/mois</span>, votre effort d'épargne mensuel devrait être de :</p>
                     
                     <div className="bg-emerald-100 p-6 rounded-lg text-center shadow">
                         <p className="text-3xl md:text-4xl font-extrabold text-emerald-900">
@@ -252,7 +251,7 @@ const App: React.FC = () => {
                 <hr className="my-8 border-slate-600" />
                 
                 <div className="text-center">
-                     <h3 className="text-lg font-semibold text-gray-100 mb-3">Passez à l'étape suivante</h3>
+                     <h3 className="text-lg font-semibold text-gray-100 mb-3">Concrétisez votre objectif d'indépendance</h3>
                      <form onSubmit={handleEmailSubmit} className="flex flex-col sm:flex-row gap-2 mb-4">
                         <input
                             type="email"
@@ -271,10 +270,10 @@ const App: React.FC = () => {
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
                         <a href="https://www.aeterniapatrimoine.fr/solutions/scpi/" target="_blank" rel="noopener noreferrer" className="bg-[#00FFD2] text-slate-900 font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-white transition-colors duration-300 w-full sm:w-auto">
-                            Découvrir nos solutions SCPI
+                            Découvrir nos solutions
                         </a>
                         <a href="https://www.aeterniapatrimoine.fr/contact/" target="_blank" rel="noopener noreferrer" className="bg-transparent border-2 border-[#00FFD2] text-[#00FFD2] font-bold py-3 px-8 rounded-lg hover:bg-[#00FFD2] hover:text-slate-900 transition-colors duration-300 w-full sm:w-auto">
-                            Être contacté
+                            Parler à un conseiller
                         </a>
                     </div>
                 </div>
@@ -283,7 +282,7 @@ const App: React.FC = () => {
 
         {/* Chart Section */}
         <div className="bg-slate-700/50 p-6 rounded-lg shadow-inner ring-1 ring-white/10">
-            <h2 className="text-2xl font-semibold text-[#00FFD2] mb-6 text-center">Projection de votre Épargne</h2>
+            <h2 className="text-2xl font-semibold text-[#00FFD2] mb-6 text-center">Projection de votre Patrimoine</h2>
             <div style={{ width: '100%', height: 300 }}>
                 <ResponsiveContainer>
                     <LineChart data={chartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
